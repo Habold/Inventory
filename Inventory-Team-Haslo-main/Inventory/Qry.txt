@@ -1,0 +1,59 @@
+CREATE TABLE Suppliers (
+    SupplierID INT AUTO_INCREMENT PRIMARY KEY,
+    SupplierName VARCHAR(100) NOT NULL,
+    ContactName VARCHAR(100),
+    PhoneNumber VARCHAR(15),
+    Email VARCHAR(100),
+    Address TEXT,
+    City VARCHAR(50),
+    Country VARCHAR(50)
+);
+
+CREATE TABLE Products (
+    ProductID INT AUTO_INCREMENT PRIMARY KEY,
+    ProductName VARCHAR(100) NOT NULL,
+    Category VARCHAR(50),
+    Description TEXT,
+    Price DECIMAL(10, 2) NOT NULL,
+    Stock INT NOT NULL,
+    SupplierID INT,
+    DateAdded DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (SupplierID) REFERENCES Suppliers(SupplierID)
+);
+
+CREATE TABLE Display (
+    ProductID INT PRIMARY KEY,
+    ProductName VARCHAR(100) NOT NULL,
+    Category VARCHAR(50),
+    Stock INT NOT NULL,
+    Price DECIMAL(10, 2) NOT NULL,
+    SupplierName VARCHAR(100),
+    Status VARCHAR(20) CHECK (Status IN ('In Stock', 'Out of Stock', 'Discontinued')),
+    LastUpdated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
+);
+
+
+INSERT INTO Suppliers (SupplierName, ContactName, PhoneNumber, Email, Address, City, Country)
+VALUES
+('Global Supplies Co.', 'Alice Johnson', '1234567890', 'alice@globalsupplies.com', '123 Elm Street', 'New York', 'USA'),
+('Tech Distributors', 'Bob Smith', '9876543210', 'bob@techdistro.com', '456 Pine Avenue', 'San Francisco', 'USA'),
+('Eco Products Ltd.', 'Clara Green', '5432167890', 'clara@ecoproducts.com', '789 Oak Boulevard', 'Chicago', 'USA');
+
+
+INSERT INTO Products (ProductName, Category, Description, Price, Stock, SupplierID)
+VALUES
+('Laptop', 'Electronics', 'High-performance laptop with 16GB RAM', 1200.00, 50, 2),
+('Smartphone', 'Electronics', 'Latest model smartphone with 5G support', 800.00, 100, 2),
+('Reusable Water Bottle', 'Eco-friendly', 'BPA-free reusable water bottle', 15.00, 200, 3),
+('Wireless Mouse', 'Accessories', 'Ergonomic wireless mouse', 25.00, 75, 1),
+('Office Chair', 'Furniture', 'Adjustable ergonomic office chair', 150.00, 20, 1);
+
+
+INSERT INTO GUI_Display (ProductID, ProductName, Category, Stock, Price, SupplierName, Status)
+VALUES
+(1, 'Laptop', 'Electronics', 50, 1200.00, 'Tech Distributors', 'In Stock'),
+(2, 'Smartphone', 'Electronics', 100, 800.00, 'Tech Distributors', 'In Stock'),
+(3, 'Reusable Water Bottle', 'Eco-friendly', 200, 15.00, 'Eco Products Ltd.', 'In Stock'),
+(4, 'Wireless Mouse', 'Accessories', 75, 25.00, 'Global Supplies Co.', 'In Stock'),
+(5, 'Office Chair', 'Furniture', 20, 150.00, 'Global Supplies Co.', 'In Stock');
